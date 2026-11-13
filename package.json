@@ -1,0 +1,15 @@
+{
+  "name": "fitcrowd-project",
+  "version": "1.0.0",
+  "description": "FitCrowd: Smart Fitness Center Visit Planner & Load Balancer - Complete Academic Project",
+  "scripts": {
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "db:init": "cd backend && npm run db:init",
+    "db:seed": "cd backend && npm run db:seed",
+    "test": "cd backend && npm test"
+  },
+  "keywords": ["fitness", "software-engineering", "system-design", "academic-capstone"],
+  "author": "SESD Student & Mentor",
+  "license": "MIT"
+}
