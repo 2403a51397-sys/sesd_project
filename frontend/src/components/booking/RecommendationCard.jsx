@@ -40,44 +40,46 @@ export default function RecommendationCard({ onBookSuccess }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+    <div className="bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm relative overflow-hidden">
       <div className="flex items-center gap-2 mb-2">
-        <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+        <span className="p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
           <Sparkles className="w-4 h-4" />
         </span>
-        <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">Smart Recommendation</span>
+        <span className="text-[10px] uppercase font-black tracking-widest text-emerald-700 font-mono">
+          AI Smart Recommendation
+        </span>
       </div>
-      <h3 className="text-xl font-bold text-white mb-1">
+      <h3 className="text-xl font-black text-slate-900 mb-1 font-display">
         Best Time to Visit Planner
       </h3>
-      <p className="text-xs text-slate-400 mb-5">
-        Specify your preferred training window, and our predictive algorithm will recommend the quietest hour.
+      <p className="text-xs text-slate-500 mb-5">
+        Specify your preferred training window, and our predictive neural algorithm will recommend the quietest hour with direct booking.
       </p>
 
       {/* Control Inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
         <div>
-          <label className="text-[11px] font-semibold text-slate-400 block mb-1 flex items-center gap-1">
-            <Calendar className="w-3 h-3" /> Date
+          <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1 font-mono">
+            <Calendar className="w-3 h-3 text-emerald-700" /> Date
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-medium focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
           />
         </div>
 
         <div>
-          <label className="text-[11px] font-semibold text-slate-400 block mb-1 flex items-center gap-1">
-            <Clock className="w-3 h-3" /> Earliest Start
+          <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1 font-mono">
+            <Clock className="w-3 h-3 text-emerald-700" /> Start Window
           </label>
           <select
             value={startHour}
             onChange={(e) => setStartHour(parseInt(e.target.value, 10))}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-medium focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
           >
-            {[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map((h) => (
+            {Array.from({ length: 16 }, (_, i) => i + 6).map((h) => (
               <option key={h} value={h}>
                 {h % 12 === 0 ? 12 : h % 12}:00 {h >= 12 ? 'PM' : 'AM'}
               </option>
@@ -86,19 +88,21 @@ export default function RecommendationCard({ onBookSuccess }) {
         </div>
 
         <div>
-          <label className="text-[11px] font-semibold text-slate-400 block mb-1 flex items-center gap-1">
-            <Clock className="w-3 h-3" /> Latest Finish
+          <label className="text-[11px] font-bold text-slate-600 block mb-1 flex items-center gap-1 font-mono">
+            <Clock className="w-3 h-3 text-emerald-700" /> End Window
           </label>
           <select
             value={endHour}
             onChange={(e) => setEndHour(parseInt(e.target.value, 10))}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-medium focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
           >
-            {[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22].filter(h => h > startHour).map((h) => (
-              <option key={h} value={h}>
-                {h % 12 === 0 ? 12 : h % 12}:00 {h >= 12 ? 'PM' : 'AM'}
-              </option>
-            ))}
+            {Array.from({ length: 16 }, (_, i) => i + 7)
+              .filter((h) => h > startHour)
+              .map((h) => (
+                <option key={h} value={h}>
+                  {h % 12 === 0 ? 12 : h % 12}:00 {h >= 12 ? 'PM' : 'AM'}
+                </option>
+              ))}
           </select>
         </div>
       </div>
@@ -106,51 +110,49 @@ export default function RecommendationCard({ onBookSuccess }) {
       <button
         onClick={handleGetRecommendation}
         disabled={loading}
-        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
+        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
       >
-        {loading ? 'Evaluating Forecasts...' : 'Find Lowest Crowd Slot'}
-        <ArrowRight className="w-3.5 h-3.5" />
+        <Sparkles className="w-4 h-4 text-emerald-700" />
+        {loading ? 'Analyzing Historical Variance...' : 'Calculate Optimal Visit Hour'}
       </button>
 
-      {/* Recommendation Results */}
+      {/* Result Card */}
       {recommendation && (
-        <div className="mt-5 p-4 rounded-2xl bg-slate-950 border border-emerald-500/30 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-1">
-              <ThumbsUp className="w-3.5 h-3.5" /> Optimal Pick
-            </span>
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
-              {recommendation.recommendedSlot.crowdLevel} CROWD
-            </span>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="mt-5 p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 animate-fade-in">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
-              <h4 className="text-lg font-extrabold text-white">
-                {recommendation.recommendedSlot.timeLabel}
+              <div className="flex items-center gap-1.5 text-emerald-800 font-bold text-xs uppercase tracking-wider mb-1 font-mono">
+                <ThumbsUp className="w-3.5 h-3.5" />
+                Predicted Lowest Crowd Slot
+              </div>
+              <h4 className="text-lg font-black text-slate-900 font-display">
+                {recommendation.recommendedSlot.startHour % 12 === 0 ? 12 : recommendation.recommendedSlot.startHour % 12}:00{' '}
+                {recommendation.recommendedSlot.startHour >= 12 ? 'PM' : 'AM'} &ndash;{' '}
+                {recommendation.recommendedSlot.endHour % 12 === 0 ? 12 : recommendation.recommendedSlot.endHour % 12}:00{' '}
+                {recommendation.recommendedSlot.endHour >= 12 ? 'PM' : 'AM'}
               </h4>
-              <p className="text-xs text-slate-400">
-                Projected {recommendation.recommendedSlot.occupancyPercentage}% full (~{recommendation.recommendedSlot.predictedOccupancy} people)
+              <p className="text-xs text-slate-600 mt-1 font-medium">
+                Predicted: <b className="text-slate-900 font-mono">{recommendation.recommendedSlot.predictedOccupancy} people</b> ({recommendation.recommendedSlot.occupancyRatio} capacity) &bull; Available seats: <b className="text-emerald-700 font-mono">{recommendation.recommendedSlot.availableSeats}</b>
               </p>
             </div>
 
-            {recommendation.recommendedSlot.slotId && (
-              <div>
-                {bookedStatus ? (
-                  <span className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
-                    <Check className="w-4 h-4" /> Slot Reserved!
-                  </span>
-                ) : (
-                  <button
-                    onClick={() => handleBookSlot(recommendation.recommendedSlot.slotId)}
-                    disabled={bookingLoading || recommendation.recommendedSlot.isFull}
-                    className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-md disabled:opacity-50"
-                  >
-                    {bookingLoading ? 'Reserving...' : recommendation.recommendedSlot.isFull ? 'Slot Full' : 'Book Recommended Slot'}
-                  </button>
-                )}
-              </div>
-            )}
+            <div>
+              {bookedStatus ? (
+                <div className="px-4 py-2 rounded-xl bg-emerald-100 text-emerald-900 font-bold text-xs flex items-center gap-1.5 border border-emerald-300">
+                  <Check className="w-4 h-4" />
+                  Slot Booked!
+                </div>
+              ) : (
+                <button
+                  onClick={() => handleBookSlot(recommendation.recommendedSlot.slotId)}
+                  disabled={bookingLoading || recommendation.recommendedSlot.availableSeats <= 0}
+                  className="px-4 py-2.5 rounded-xl bg-[#0e6245] hover:bg-[#0b5037] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                >
+                  <span>{bookingLoading ? 'Reserving...' : '1-Click Reserve'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

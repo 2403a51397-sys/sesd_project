@@ -31,7 +31,13 @@ function authMiddleware(req, res, next) {
       id: user.id,
       email: user.email,
       role: user.role,
-      fullName: user.full_name
+      fullName: user.full_name,
+      name: user.full_name,
+      is_active: Boolean(user.is_active),
+      avatar: user.avatar,
+      phone: user.phone,
+      address: user.address,
+      gender: user.gender
     };
 
     next();

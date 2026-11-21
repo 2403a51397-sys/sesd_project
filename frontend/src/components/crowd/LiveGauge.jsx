@@ -8,9 +8,9 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
 
   if (!crowdData) {
     return (
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 animate-pulse text-center">
-        <div className="h-4 bg-slate-800 rounded w-1/3 mx-auto mb-4"></div>
-        <div className="w-32 h-32 rounded-full border-4 border-slate-800 mx-auto"></div>
+      <div className="bg-white border border-emerald-100 rounded-3xl p-6 animate-pulse text-center shadow-sm">
+        <div className="h-4 bg-slate-200 rounded w-1/3 mx-auto mb-4"></div>
+        <div className="w-32 h-32 rounded-full border-4 border-slate-200 mx-auto"></div>
       </div>
     );
   }
@@ -22,18 +22,18 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (Math.min(100, occupancyPercentage) / 100) * circumference;
 
-  let strokeColor = '#10b981'; // emerald
-  let glowColor = 'rgba(16, 185, 129, 0.2)';
-  let badgeBg = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+  let strokeColor = '#0e6245'; // Forest Emerald
+  let glowColor = 'rgba(14, 98, 69, 0.15)';
+  let badgeBg = 'bg-emerald-50 text-emerald-800 border-emerald-200';
 
   if (crowdLevel === 'HIGH') {
-    strokeColor = '#f43f5e'; // rose
-    glowColor = 'rgba(244, 63, 94, 0.2)';
-    badgeBg = 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+    strokeColor = '#e11d48'; // Rose
+    glowColor = 'rgba(225, 29, 72, 0.15)';
+    badgeBg = 'bg-rose-50 text-rose-800 border-rose-200';
   } else if (crowdLevel === 'MEDIUM') {
-    strokeColor = '#f59e0b'; // amber
-    glowColor = 'rgba(245, 158, 11, 0.2)';
-    badgeBg = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+    strokeColor = '#d97706'; // Amber
+    glowColor = 'rgba(217, 119, 6, 0.15)';
+    badgeBg = 'bg-amber-50 text-amber-800 border-amber-200';
   }
 
   const handleCheckIn = async () => {
@@ -67,35 +67,37 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+    <div className="bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm relative overflow-hidden">
       {/* Background radial glow */}
       <div 
-        className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20 opacity-40 transition-all duration-700"
+        className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20 opacity-60 transition-all duration-700"
         style={{ backgroundColor: glowColor }}
       />
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 relative z-10">
         <div>
-          <span className="text-xs uppercase font-bold tracking-wider text-slate-400">Real-Time Occupancy</span>
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <span className="text-[10px] uppercase font-black tracking-widest text-emerald-700 font-mono">
+            Real-Time Occupancy
+          </span>
+          <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 font-display">
             Live Gym Floor
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
             </span>
           </h2>
         </div>
         <button
           onClick={onRefresh}
           title="Refresh Live Count"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="p-2 rounded-xl text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
       </div>
 
       {/* Circular Gauge */}
-      <div className="flex flex-col items-center justify-center my-4">
+      <div className="flex flex-col items-center justify-center my-4 relative z-10">
         <div className="relative w-48 h-48 flex items-center justify-center">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
             {/* Background track */}
@@ -103,7 +105,7 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
               cx="80"
               cy="80"
               r={radius}
-              stroke="#1e293b"
+              stroke="#e2e8f0"
               strokeWidth="12"
               fill="transparent"
             />
@@ -124,28 +126,28 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
 
           {/* Center stats */}
           <div className="absolute flex flex-col items-center text-center">
-            <span className="text-4xl font-extrabold text-white tracking-tight">
+            <span className="text-4xl font-black text-slate-900 tracking-tight font-display">
               {occupancyPercentage}%
             </span>
-            <span className="text-xs font-semibold text-slate-400 flex items-center gap-1 mt-0.5">
-              <Users className="w-3.5 h-3.5" />
+            <span className="text-xs font-bold text-slate-500 flex items-center gap-1 mt-0.5 font-mono">
+              <Users className="w-3.5 h-3.5 text-emerald-700" />
               {currentOccupancy} / {maxCapacity}
             </span>
           </div>
         </div>
 
         {/* Status Badge */}
-        <div className={`mt-3 px-3.5 py-1 rounded-full text-xs font-bold border uppercase tracking-wider ${badgeBg}`}>
-          {crowdLevel} CROWD LEVEL
+        <div className={`mt-3 px-3.5 py-1 rounded-full text-xs font-black border uppercase tracking-wider font-mono ${badgeBg}`}>
+          {crowdLevel} DENSITY LEVEL
         </div>
       </div>
 
       {/* Check-In / Check-Out Actions */}
-      <div className="mt-6 pt-5 border-t border-slate-800/80">
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
-          <span>Your Workout State:</span>
-          <span className={`font-semibold ${userStatus?.isCheckedIn ? 'text-emerald-400' : 'text-slate-400'}`}>
-            {userStatus?.isCheckedIn ? ' Currently on Gym Floor' : ' Not Checked In'}
+      <div className="mt-6 pt-5 border-t border-slate-100 relative z-10">
+        <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
+          <span>Your Floor State:</span>
+          <span className={`font-bold ${userStatus?.isCheckedIn ? 'text-emerald-700' : 'text-slate-400'}`}>
+            {userStatus?.isCheckedIn ? '● Currently on Gym Floor' : '○ Not Checked In'}
           </span>
         </div>
 
@@ -153,7 +155,7 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
           <button
             onClick={handleCheckOut}
             disabled={actionLoading}
-            className="w-full py-2.5 px-4 rounded-xl font-semibold text-sm bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-rose-600/20 transition-all disabled:opacity-50"
+            className="w-full py-3 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
             <LogOut className="w-4 h-4" />
             {actionLoading ? 'Recording Check-Out...' : 'Complete Workout & Check Out'}
@@ -162,7 +164,7 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
           <button
             onClick={handleCheckIn}
             disabled={actionLoading}
-            className="w-full py-2.5 px-4 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-50"
+            className="w-full py-3 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#0e6245] hover:bg-[#0b5037] text-white flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
             <LogIn className="w-4 h-4" />
             {actionLoading ? 'Recording Check-In...' : 'Check In at Fitness Center'}
@@ -170,8 +172,12 @@ export default function LiveGauge({ crowdData, onRefresh, userStatus, onStatusCh
         )}
 
         {feedback && (
-          <div className={`mt-3 p-2.5 rounded-xl text-xs flex items-center gap-2 ${feedback.type === 'success' ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-300 border border-rose-500/20'}`}>
-            {feedback.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+          <div className={`mt-3 p-3 rounded-2xl text-xs flex items-center gap-2 font-medium ${
+            feedback.type === 'success'
+              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+              : 'bg-rose-50 text-rose-800 border border-rose-200'
+          }`}>
+            {feedback.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" /> : <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />}
             <span>{feedback.message}</span>
           </div>
         )}

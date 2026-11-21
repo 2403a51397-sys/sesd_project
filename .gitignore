@@ -16,6 +16,7 @@ backend/data/*.db-shm
 
 # Build Artifacts
 dist/
+frontend/dist/
 dist-ssr/
 build/
 *.local

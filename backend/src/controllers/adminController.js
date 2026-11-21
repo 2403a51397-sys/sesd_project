@@ -70,6 +70,40 @@ class AdminController {
     }
   }
 
+  async updateMemberStatus(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { isActive } = req.body;
+      const updated = userRepository.updateStatus(Number(id), isActive);
+      if (!updated) {
+        const err = new Error('User not found.');
+        err.statusCode = 404;
+        err.isOperational = true;
+        throw err;
+      }
+      res.status(200).json({
+        success: true,
+        message: `User status updated to ${isActive ? 'Active' : 'Pending/Inactive'}`,
+        data: updated
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async deleteMember(req, res, next) {
+    try {
+      const { id } = req.params;
+      userRepository.delete(Number(id));
+      res.status(200).json({
+        success: true,
+        message: 'User removed successfully.'
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   async createAnnouncement(req, res, next) {
     try {
       const { title, content, priority } = req.body;

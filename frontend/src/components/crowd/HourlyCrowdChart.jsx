@@ -35,40 +35,42 @@ export default function HourlyCrowdChart() {
   }, [selectedDay]);
 
   const getBarColor = (pct) => {
-    if (pct >= 80) return 'from-rose-600 to-rose-400';
-    if (pct >= 50) return 'from-amber-600 to-amber-400';
-    return 'from-emerald-600 to-teal-400';
+    if (pct >= 80) return 'from-rose-500 to-rose-600';
+    if (pct >= 50) return 'from-amber-400 to-amber-500';
+    return 'from-emerald-500 to-[#0e6245]';
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+    <div className="bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase font-bold tracking-wider text-slate-400">Predictive Intelligence</span>
+            <span className="text-[10px] uppercase font-black tracking-widest text-emerald-700 font-mono">
+              Predictive Intelligence
+            </span>
             {forecast?.strategyUsed && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-slate-800 text-slate-300 font-mono flex items-center gap-1 border border-slate-700">
-                <Sparkles className="w-3 h-3 text-emerald-400" />
+              <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-50 text-emerald-800 font-mono font-bold flex items-center gap-1 border border-emerald-200">
+                <Sparkles className="w-3 h-3 text-emerald-600" />
                 {forecast.strategyUsed}
               </span>
             )}
           </div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-emerald-400" />
-            Predicted Crowd by Hour
+          <h3 className="text-xl font-black text-slate-900 flex items-center gap-2 font-display">
+            <BarChart3 className="w-5 h-5 text-emerald-700" />
+            Predicted Floor Density by Hour
           </h3>
         </div>
 
         {/* Day of Week Tabs */}
-        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 overflow-x-auto">
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200 overflow-x-auto">
           {DAYS.map((d) => (
             <button
               key={d.id}
               onClick={() => setSelectedDay(d.id)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 selectedDay === d.id
-                  ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#0e6245] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
               {d.label}
@@ -79,18 +81,18 @@ export default function HourlyCrowdChart() {
 
       {loading ? (
         <div className="h-64 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div>
           {/* Bar Chart Container */}
-          <div className="h-60 flex items-end gap-1.5 sm:gap-2 pt-6 pb-2 border-b border-slate-800 relative">
+          <div className="h-60 flex items-end gap-1.5 sm:gap-2 pt-6 pb-2 border-b border-slate-200 relative">
             {/* 50% and 80% threshold guide lines */}
-            <div className="absolute inset-x-0 bottom-[50%] border-b border-dashed border-slate-700/60 pointer-events-none flex justify-end">
-              <span className="text-[10px] text-amber-400/70 mr-1 -mt-4">50% Medium</span>
+            <div className="absolute inset-x-0 bottom-[50%] border-b border-dashed border-amber-300 pointer-events-none flex justify-end">
+              <span className="text-[10px] text-amber-700 font-mono font-bold mr-1 -mt-4">50% Medium</span>
             </div>
-            <div className="absolute inset-x-0 bottom-[80%] border-b border-dashed border-rose-500/30 pointer-events-none flex justify-end">
-              <span className="text-[10px] text-rose-400/70 mr-1 -mt-4">80% High</span>
+            <div className="absolute inset-x-0 bottom-[80%] border-b border-dashed border-rose-300 pointer-events-none flex justify-end">
+              <span className="text-[10px] text-rose-700 font-mono font-bold mr-1 -mt-4">80% High</span>
             </div>
 
             {forecast?.predictions.map((p) => {
@@ -106,9 +108,9 @@ export default function HourlyCrowdChart() {
                 >
                   {/* Tooltip */}
                   {isHovered && (
-                    <div className="absolute -top-12 z-20 bg-slate-950 text-white border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] whitespace-nowrap shadow-xl pointer-events-none">
+                    <div className="absolute -top-12 z-20 bg-slate-900 text-white rounded-xl px-2.5 py-1 text-[11px] whitespace-nowrap shadow-xl pointer-events-none animate-fade-in font-mono">
                       <p className="font-bold">{p.timeLabel}</p>
-                      <p className="text-slate-300">
+                      <p className="text-emerald-300">
                         {p.occupancyPercentage}% full (~{p.predictedOccupancy} people)
                       </p>
                     </div>
@@ -117,11 +119,13 @@ export default function HourlyCrowdChart() {
                   {/* The Bar */}
                   <div
                     style={{ height: `${heightPct}%` }}
-                    className={`w-full rounded-t-md bg-gradient-to-t ${getBarColor(p.occupancyPercentage)} transition-all duration-300 group-hover:brightness-125 ${isHovered ? 'ring-2 ring-white ring-offset-2 ring-offset-slate-900' : ''}`}
+                    className={`w-full rounded-t-lg bg-gradient-to-t ${getBarColor(p.occupancyPercentage)} transition-all duration-300 group-hover:brightness-110 ${
+                      isHovered ? 'ring-2 ring-emerald-700 ring-offset-2' : ''
+                    }`}
                   />
                   
                   {/* Hour label below */}
-                  <span className="text-[10px] text-slate-400 mt-2 font-mono group-hover:text-white">
+                  <span className="text-[10px] text-slate-500 mt-2 font-mono group-hover:text-slate-900 font-bold">
                     {p.hour}h
                   </span>
                 </div>
@@ -130,20 +134,20 @@ export default function HourlyCrowdChart() {
           </div>
 
           {/* Legend */}
-          <div className="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-400">
+          <div className="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-500 font-medium">
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-emerald-500"></span> Low (&lt;50%)
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Low (&lt;50%)
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-amber-500"></span> Medium (50-80%)
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Medium (50-80%)
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-rose-500"></span> High (&gt;80%)
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> High (&gt;80%)
               </span>
             </div>
-            <span className="text-[11px] text-slate-400">
-              Hover over bars to inspect hourly headcounts
+            <span className="text-[11px] text-slate-400 font-mono">
+              Hover over bars to inspect hourly capacity headcounts
             </span>
           </div>
         </div>

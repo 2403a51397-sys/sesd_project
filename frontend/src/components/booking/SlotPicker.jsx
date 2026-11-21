@@ -63,31 +63,39 @@ export default function SlotPicker() {
   return (
     <div className="space-y-6">
       {/* Date Header & Selector */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase font-bold tracking-wider text-slate-400">Capacity Management</span>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-emerald-400" />
+          <span className="text-[10px] uppercase font-black tracking-widest text-emerald-700 font-mono">
+            Capacity Governance
+          </span>
+          <h3 className="text-xl font-black text-slate-900 flex items-center gap-2 font-display">
+            <Calendar className="w-5 h-5 text-emerald-700" />
             Reserve Workout Slot
           </h3>
-          <p className="text-xs text-slate-400">
-            Select an hourly slot. Real-time capacity enforcement prevents gym floor overcrowding.
+          <p className="text-xs text-slate-500">
+            Select an hourly slot. Real-time atomic database transactions prevent gym floor overcrowding.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-slate-400 whitespace-nowrap">Choose Date:</label>
+          <label className="text-xs font-bold text-slate-600 whitespace-nowrap font-mono">Choose Date:</label>
           <input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white"
           />
         </div>
       </div>
 
       {message && (
-        <div className={`p-4 rounded-2xl text-xs font-semibold flex items-center gap-2 ${message.type === 'success' ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-300 border border-rose-500/20'}`}>
+        <div
+          className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 ${
+            message.type === 'success'
+              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+              : 'bg-rose-50 text-rose-800 border border-rose-200'
+          }`}
+        >
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{message.text}</span>
         </div>
@@ -96,7 +104,7 @@ export default function SlotPicker() {
       {/* Slots Grid */}
       {loading ? (
         <div className="h-48 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
@@ -109,55 +117,61 @@ export default function SlotPicker() {
                 key={slot.id}
                 className={`p-4 rounded-2xl border transition-all ${
                   booked
-                    ? 'bg-emerald-950/30 border-emerald-500/40 ring-1 ring-emerald-500/30'
+                    ? 'bg-emerald-50/70 border-emerald-300 ring-1 ring-emerald-400'
                     : full
-                    ? 'bg-slate-900/50 border-slate-800/80 opacity-60'
-                    : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                    ? 'bg-slate-50 border-slate-200 opacity-60'
+                    : 'bg-white border-slate-200 hover:border-emerald-300 shadow-xs'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5 font-mono">
                     <Clock className="w-3.5 h-3.5 text-slate-400" />
                     {slot.timeLabel}
                   </span>
                   {booked ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">
                       Booked
                     </span>
                   ) : full ? (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold border border-rose-200">
                       Full
                     </span>
                   ) : (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-semibold">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold font-mono">
                       {slot.availableSeats} left
                     </span>
                   )}
                 </div>
 
                 {/* Progress bar */}
-                <div className="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden mb-3">
+                <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
                   <div
                     style={{ width: `${slot.occupancyPercentage}%` }}
-                    className={`h-full ${slot.occupancyPercentage >= 80 ? 'bg-rose-500' : slot.occupancyPercentage >= 50 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                    className={`h-full ${
+                      slot.occupancyPercentage >= 80
+                        ? 'bg-rose-500'
+                        : slot.occupancyPercentage >= 50
+                        ? 'bg-amber-500'
+                        : 'bg-emerald-500'
+                    }`}
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                    <Users className="w-3 h-3" />
+                  <span className="text-[11px] text-slate-500 font-mono flex items-center gap-1">
+                    <Users className="w-3 h-3 text-slate-400" />
                     {slot.currentBookings} / {slot.maxCapacity}
                   </span>
 
                   {booked ? (
-                    <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
+                    <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
                       <Check className="w-3.5 h-3.5" /> Reserved
                     </span>
                   ) : (
                     <button
                       onClick={() => handleBook(slot.id)}
                       disabled={full || actionSlotId === slot.id}
-                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40 disabled:hover:bg-emerald-600 transition-all shadow-sm"
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0e6245] hover:bg-[#0b5037] text-white disabled:opacity-40 transition-all shadow-sm cursor-pointer"
                     >
                       {actionSlotId === slot.id ? 'Booking...' : full ? 'Full' : 'Book'}
                     </button>
@@ -171,23 +185,23 @@ export default function SlotPicker() {
 
       {/* User's Upcoming Bookings */}
       {myBookings.filter((b) => b.status === 'BOOKED').length > 0 && (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl mt-6">
-          <h4 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-            <Check className="w-4 h-4 text-emerald-400" />
+        <div className="bg-white border border-emerald-100 rounded-3xl p-6 shadow-sm mt-6">
+          <h4 className="text-base font-black text-slate-900 mb-4 flex items-center gap-2 font-display">
+            <Check className="w-4 h-4 text-emerald-600" />
             Your Confirmed Reservations
           </h4>
-          <div className="divide-y divide-slate-800">
+          <div className="divide-y divide-slate-100">
             {myBookings
               .filter((b) => b.status === 'BOOKED')
               .map((b) => (
                 <div key={b.bookingId} className="py-3 flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-white">{b.date} • {b.timeLabel}</p>
-                    <span className="text-[11px] text-slate-400">Status: Confirmed ({b.status})</span>
+                    <p className="text-sm font-bold text-slate-900">{b.date} • {b.timeLabel}</p>
+                    <span className="text-[11px] text-slate-500 font-mono">Status: Confirmed ({b.status})</span>
                   </div>
                   <button
                     onClick={() => handleCancel(b.bookingId)}
-                    className="px-3 py-1.5 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 border border-rose-500/20 transition-all flex items-center gap-1"
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:bg-rose-50 border border-rose-200 transition-all flex items-center gap-1 cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" /> Cancel
                   </button>

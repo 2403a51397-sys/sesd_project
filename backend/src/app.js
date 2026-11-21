@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const crowdRoutes = require('./routes/crowdRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const shopRoutes = require('./routes/shopRoutes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/crowd', crowdRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/shop', shopRoutes);
 
 // Centralized error handling
 app.use(errorMiddleware);
