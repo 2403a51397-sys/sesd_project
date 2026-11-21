@@ -4,7 +4,7 @@
   "description": "FitCrowd Smart Fitness Center Visit Planner - Backend REST API",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node scripts/initDb.js && node src/app.js",
     "dev": "node --watch src/app.js",
     "db:init": "node scripts/initDb.js",
     "db:seed": "node scripts/seedData.js",
